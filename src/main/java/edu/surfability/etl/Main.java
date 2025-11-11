@@ -61,11 +61,9 @@ public class Main {
 //        join on timestamp (UTC), prefer waves from first station as primary; keep station id
         String primaryNdbc = ndbcStations.get(0);
         List<HourlyRow> rows = Joiner.innerJoin(ndbcHourly, tideHourly, primaryNdbc, tideStation);
-
-// 5) FEATURE ENGINEERING
         rows.forEach(DirectionCalculator::augment);
 
-// 6) LABEL (rule-based). Tune thresholds to your coast and goals.
+//        label
         for (HourlyRow r : rows) {
             r.labelSurfable = Labeler.ruleBased(
                     r.wvht_m, r.dpd_s, r.mwd_deg,
@@ -74,7 +72,7 @@ public class Main {
             );
         }
 
-// 7) WRITE CSV
+//        write csv
         try (OutputStream os = new FileOutputStream(out)) {
             CsvUtil.writeHourlyRows(os, rows);
         }
