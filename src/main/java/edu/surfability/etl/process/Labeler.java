@@ -1,8 +1,10 @@
 package edu.surfability.etl.process;
 
-
 public class Labeler {
-//    Simple, transparent rule: tune to your local break orientation & preferences.
+//    Simple rule: can be tuned to local orientation & preferences.
+//    We may want to change rule to a score for use in k-nn.
+//    For example, ideal conditions at Morro Bay would be 4-6ft, 12s period, and no wind
+//    Binary surfability label might not be best for clustering in k-nn
     public static boolean ruleBased(Double wvht_m, Double dpd_s, Double mwd_deg,
                                     Double wspd_mps, Double wd_deg,
                                     Double tide_m){
