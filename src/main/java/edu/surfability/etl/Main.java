@@ -13,7 +13,11 @@ import java.util.*;
 
 public class Main {
     /*
+     * Requirements:
+     * jdk25
+     * maven
      * Example usage:
+     * mvn clean compile
      * mvn -q exec:java
      */
     public static void main(String[] args) throws Exception {
