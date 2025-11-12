@@ -24,7 +24,7 @@ public class Main {
         Map<String, String> argsMap = parseArgs(args);
         Instant start = Instant.parse(argsMap.getOrDefault("--start", "2024-01-01T00:00:00Z"));
         Instant end = Instant.parse(argsMap.getOrDefault("--end", "2024-03-31T23:00:00Z"));
-        String out = argsMap.getOrDefault("--out", "data/surfability_hourly.csv");
+        String out = argsMap.getOrDefault("--out", "data/raw_surfability_hourly.csv");
         List<String> ndbcStations = argsMap.containsKey("--ndbc") ? List.of(argsMap.get("--ndbc").split(",")) : List.of("46028", "46042"); //Cape San Martin and Monterey
         String tideStation = argsMap.getOrDefault("--tide", "9412110"); // Monterey
 
