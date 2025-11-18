@@ -48,7 +48,7 @@ public class Normalizer {
 
         // STEP 2: Extract numeric data (skip label columns)
         for (int i = 0; i < rows; i++) {
-            for (int j = skipColumns; j < cols; j++) {
+            for (int j = skipColumns; j < cols - 1; j++) {
                 try {
                     data[i][j - skipColumns] = Double.parseDouble(rawRows.get(i)[j]);
                 } catch (NumberFormatException e) {
@@ -62,7 +62,7 @@ public class Normalizer {
         double[] means = new double[numCols];
         double[] stds = new double[numCols];
 
-        for (int j = 0; j < numCols; j++) {
+        for (int j = 0; j < numCols - 1; j++) {
             double sum = 0;
             for (int i = 0; i < rows; i++) sum += data[i][j];
             means[j] = sum / rows;
@@ -76,7 +76,7 @@ public class Normalizer {
         // STEP 4: Apply Z-score normalization
         double[][] normalized = new double[rows][numCols];
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < numCols; j++) {
+            for (int j = 0; j < numCols - 1; j++) {
                 normalized[i][j] = (data[i][j] - means[j]) / stds[j];
             }
         }
