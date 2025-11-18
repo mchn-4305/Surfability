@@ -4,15 +4,15 @@ import java.io.*;
 import java.util.*;
 
 // Normalizer
-// Will keep header and ignore first N columns
+// Will keep header, ignore first N columns, and also ignore the last column
 public class Normalizer {
 
     public static void main(String[] args) {
-        // File paths relative to the project root
+        // File paths
         String inputFile = "data/data_clean.csv";
         String outputFile = "data/normalized_data_clean.csv";
 
-        // Number of columns to skip (e.g., ID or label columns)
+        // Number of columns to skip at start
         int skipColumns = 3;
 
         List<String[]> rawRows = new ArrayList<>();
@@ -22,10 +22,10 @@ public class Normalizer {
         try (BufferedReader br = new BufferedReader(new FileReader(inputFile))) {
             String line;
 
-            // Read and store header row
+            // Header
             header = br.readLine().split(",");
 
-            // Read remaining rows (data only)
+            // Data rows
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.split(",");
                 rawRows.add(tokens);
@@ -35,6 +35,7 @@ public class Normalizer {
                 System.err.println("No data found after header.");
                 return;
             }
+
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
             return;
@@ -42,27 +43,32 @@ public class Normalizer {
 
         int rows = rawRows.size();
         int cols = rawRows.get(0).length;
-        int numCols = cols - skipColumns;
 
-        double[][] data = new double[rows][numCols];
+        // Number of columns to actually normalize
+        int numNormalizedCols = cols - skipColumns - 1; // skip first N and last column
 
-        // STEP 2: Extract numeric data (skip label columns)
+        double[][] data = new double[rows][numNormalizedCols];
+
+        // STEP 2: Extract numeric data for normalization
         for (int i = 0; i < rows; i++) {
-            for (int j = skipColumns; j < cols - 1; j++) {
+            for (int j = skipColumns; j < cols - 1; j++) { // up to second-to-last column
+                int idx = j - skipColumns;
+                if (idx >= numNormalizedCols) break;
+
                 try {
-                    data[i][j - skipColumns] = Double.parseDouble(rawRows.get(i)[j]);
+                    data[i][idx] = Double.parseDouble(rawRows.get(i)[j]);
                 } catch (NumberFormatException e) {
                     System.err.println("Non-numeric value at row " + (i + 2) + ", col " + (j + 1));
-                    data[i][j - skipColumns] = 0.0;
+                    data[i][idx] = 0.0;
                 }
             }
         }
 
-        // STEP 3: Compute mean and standard deviation for each numeric column
-        double[] means = new double[numCols];
-        double[] stds = new double[numCols];
+        // STEP 3: Compute means and stds
+        double[] means = new double[numNormalizedCols];
+        double[] stds = new double[numNormalizedCols];
 
-        for (int j = 0; j < numCols - 1; j++) {
+        for (int j = 0; j < numNormalizedCols; j++) {
             double sum = 0;
             for (int i = 0; i < rows; i++) sum += data[i][j];
             means[j] = sum / rows;
@@ -74,39 +80,42 @@ public class Normalizer {
         }
 
         // STEP 4: Apply Z-score normalization
-        double[][] normalized = new double[rows][numCols];
+        double[][] normalized = new double[rows][numNormalizedCols];
+
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < numCols - 1; j++) {
+            for (int j = 0; j < numNormalizedCols; j++) {
                 normalized[i][j] = (data[i][j] - means[j]) / stds[j];
             }
         }
 
-        // STEP 5: Write new CSV (including header)
+        // STEP 5: Write output CSV
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile))) {
-            // Write header first
-            for (int j = 0; j < skipColumns; j++) {
-                bw.write(header[j]);
-                bw.write(",");
-            }
-            for (int j = skipColumns; j < header.length; j++) {
+
+            // Write header
+            for (int j = 0; j < header.length; j++) {
                 bw.write(header[j]);
                 if (j < header.length - 1) bw.write(",");
             }
             bw.newLine();
 
-            // Write normalized data
+            // Write rows
             for (int i = 0; i < rows; i++) {
-                // Write skipped columns unchanged
+
+                // Write first N skipped columns unchanged
                 for (int j = 0; j < skipColumns; j++) {
                     bw.write(rawRows.get(i)[j]);
                     bw.write(",");
                 }
 
-                // Write normalized numeric data
-                for (int j = 0; j < numCols; j++) {
+                // Write normalized middle columns
+                for (int j = 0; j < numNormalizedCols; j++) {
                     bw.write(String.format("%.5f", normalized[i][j]));
-                    if (j < numCols - 1) bw.write(",");
+                    bw.write(",");
                 }
+
+                // Write last column unchanged
+                bw.write(rawRows.get(i)[cols - 1]);
+
                 bw.newLine();
             }
 
@@ -117,6 +126,3 @@ public class Normalizer {
         }
     }
 }
-
-
-
