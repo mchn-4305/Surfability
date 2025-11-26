@@ -10,6 +10,12 @@ public class Main {
         ArrayList<Row> all_rows = read_normalized_data("data/normalized_data_clean.csv");
         System.out.println(all_rows.get(0));
         System.out.println(all_rows.get(42));
+        // Need to split data into training, validation, and testing
+        // (validation/testing data must be time-wise (timestampUtc) after the training data)
+
+        // Need to perform KNN algorithm (multiple times iwht hyperparameter tuning)
+
+        // Need to calculate the final algorithm's accuracy/error
     }
 
     public static ArrayList<Row> read_normalized_data(String filename) {
