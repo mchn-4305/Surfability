@@ -3,19 +3,50 @@ import java.io.BufferedReader;
 import java.time.Instant;
 import java.util.*;
 import edu.surfability.train.data.*;
+import edu.surfability.train.models.KNN;
+
 import java.io.*;
 
 public class Main {
     public static void main(String[] args) {
+        // Reading in normalized clean data
         ArrayList<Row> all_rows = read_normalized_data("data/normalized_data_clean.csv");
         System.out.println(all_rows.get(0));
         System.out.println(all_rows.get(42));
-        // Need to split data into training, validation, and testing
-        // (validation/testing data must be time-wise (timestampUtc) after the training data)
+        
+        // Splitting into about 70% training, 10% validation, 20% testing
+        // With training set data time-wise (timestampUtc) before the validation and testing sets
+        ArrayList<Row> train = new ArrayList<>();
+        ArrayList<Row> validation = new ArrayList<>();
+        ArrayList<Row> test = new ArrayList<>();
 
-        // Need to perform KNN algorithm (multiple times iwht hyperparameter tuning)
+        Instant start2024 = Instant.parse("2024-01-01T00:00:00Z");
+        ArrayList<Row> rows2024 = new ArrayList<>();
+
+        for (Row r : all_rows) {
+            if (r.timestampUtc.isBefore(start2024)) {
+                train.add(r);        // All 2023 rows → training
+            } else {
+                rows2024.add(r);     // All 2024 rows → val/test randomization pool
+            }
+        }
+
+        Collections.shuffle(rows2024, new Random());  // randomize order
+
+        int valCount = (int) Math.ceil(rows2024.size() * 0.10);
+
+        validation.addAll(rows2024.subList(0, valCount));
+        test.addAll(rows2024.subList(valCount, rows2024.size()));
+
+        System.out.println("Training rows: " + train.size());
+        System.out.println("Validation rows (random): " + validation.size());
+        System.out.println("Testing rows (random): " + test.size());
+
+        // Need to perform KNN algorithm (multiple times with hyperparameter tuning)
+        KNN model = new KNN(train, validation, test);
 
         // Need to calculate the final algorithm's accuracy/error
+        // and export/visualize results
     }
 
     public static ArrayList<Row> read_normalized_data(String filename) {
