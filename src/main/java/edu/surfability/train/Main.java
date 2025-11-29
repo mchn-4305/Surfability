@@ -13,7 +13,7 @@ public class Main {
         ArrayList<Row> all_rows = read_normalized_data("data/normalized_data_clean.csv");
         System.out.println(all_rows.get(0));
         System.out.println(all_rows.get(42));
-        
+
         // Splitting into about 70% training, 10% validation, 20% testing
         // With training set data time-wise (timestampUtc) before the validation and testing sets
         ArrayList<Row> train = new ArrayList<>();
@@ -44,6 +44,7 @@ public class Main {
 
         // Need to perform KNN algorithm (multiple times with hyperparameter tuning)
         KNN model = new KNN(train, validation, test);
+        HashMap<Integer, Double> results = model.process();
 
         // Need to calculate the final algorithm's accuracy/error
         // and export/visualize results

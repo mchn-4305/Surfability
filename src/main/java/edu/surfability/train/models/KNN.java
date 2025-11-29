@@ -14,5 +14,11 @@ public class KNN {
         this.testing = testing;
     }
 
+    public HashMap<Integer, Double> process() {
+        HashMap<Integer, Double> results = new HashMap<>(); // This maps k to the accuracy score
+        // Try multiple different k's, use validation set for optimizing
+        return results;
+    }
+
 
 }
