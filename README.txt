@@ -32,6 +32,13 @@ LABEL_SURFABLE: Binary Label (1 = surfable, 0 = not surfable)
 ETL (Micah):
 insert etl functionality here
 
-
+SOME OF OUR CURRENT DATA FROM OUR MODEL
+---- Evaluation for k=14 ----
+Test Accuracy:   0.9140999315537304
+Test Error:      0.08590006844626963
+Train Accuracy:  0.9379539086178303
+Overall Accuracy:0.931978912176932
+Overall Error:   0.06802108782306804
+----------------------------------
 
 

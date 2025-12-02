@@ -17,7 +17,7 @@ public class KNN {
     public HashMap<Integer, Double> process() {
         HashMap<Integer, Double> results = new HashMap<>(); // K -> accuracy
 
-        for (int k = 1; k <= 80; k++) {
+        for (int k = 1; k <= 15; k++) {
             int correct = 0;
 
             for (Row r : validation) {
@@ -37,20 +37,46 @@ public class KNN {
     }
 
     public double evaluateTestSet(int k) {
-        int correct = 0;
-
+        // --- Testing Accuracy ---
+        int testCorrect = 0;
         for (Row r : testing) {
             boolean prediction = predict(k, r);
             if (prediction == r.labelSurfable) {
-                correct++;
+                testCorrect++;
             }
         }
+        double testAccuracy = testCorrect / (double) testing.size();
+        double testError = 1.0 - testAccuracy;
 
-        double accuracy = correct / (double) testing.size();
-        System.out.println("Final Test Accuracy using k=" + k + ": " + accuracy);
+        // --- Training Accuracy ---
+        int trainCorrect = 0;
+        for (Row r : training) {
+            boolean prediction = predict(k, r);
+            if (prediction == r.labelSurfable) {
+                trainCorrect++;
+            }
+        }
+        double trainAccuracy = trainCorrect / (double) training.size();
 
-        return accuracy;
+        // --- Overall Accuracy ---
+        int totalCorrect = testCorrect + trainCorrect;
+        int totalSize = testing.size() + training.size();
+
+        double overallAccuracy = totalCorrect / (double) totalSize;
+        double overallError = 1.0 - overallAccuracy;
+
+        // --- Print Summary ---
+        System.out.println("---- Evaluation for k=" + k + " ----");
+        System.out.println("Test Accuracy:   " + testAccuracy);
+        System.out.println("Test Error:      " + testError);
+        System.out.println("Train Accuracy:  " + trainAccuracy);
+        System.out.println("Overall Accuracy:" + overallAccuracy);
+        System.out.println("Overall Error:   " + overallError);
+        System.out.println("----------------------------------");
+
+        return testAccuracy;
     }
+
 
 
 
