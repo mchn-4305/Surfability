@@ -37,16 +37,37 @@ public class KNN {
     }
 
     public double evaluateTestSet(int k) {
-        // --- Testing Accuracy ---
+
+        // --- Counters for confusion matrix (test set only) ---
+        int TP = 0; // predicted surfable, actually surfable
+        int FP = 0; // predicted surfable, actually NOT surfable
+        int TN = 0; // predicted NOT surfable, actually not surfable
+        int FN = 0; // predicted NOT surfable, actually surfable
+
+        // --- Test Accuracy ---
         int testCorrect = 0;
         for (Row r : testing) {
             boolean prediction = predict(k, r);
-            if (prediction == r.labelSurfable) {
+            boolean actual = r.labelSurfable;
+
+            if (prediction == actual) {
                 testCorrect++;
+                if (actual) TP++; else TN++;
+            } else {
+                if (prediction) FP++; else FN++;
             }
         }
+
         double testAccuracy = testCorrect / (double) testing.size();
         double testError = 1.0 - testAccuracy;
+
+        // --- Precision / Recall / F1 ---
+        double precision = (TP + FP == 0) ? 0 : TP / (double)(TP + FP);
+        double recall    = (TP + FN == 0) ? 0 : TP / (double)(TP + FN);
+
+        double f1 = (precision + recall == 0) ?
+                0 :
+                2 * (precision * recall) / (precision + recall);
 
         // --- Training Accuracy ---
         int trainCorrect = 0;
@@ -61,21 +82,26 @@ public class KNN {
         // --- Overall Accuracy ---
         int totalCorrect = testCorrect + trainCorrect;
         int totalSize = testing.size() + training.size();
-
         double overallAccuracy = totalCorrect / (double) totalSize;
         double overallError = 1.0 - overallAccuracy;
 
         // --- Print Summary ---
         System.out.println("---- Evaluation for k=" + k + " ----");
-        System.out.println("Test Accuracy:   " + testAccuracy);
-        System.out.println("Test Error:      " + testError);
-        System.out.println("Train Accuracy:  " + trainAccuracy);
-        System.out.println("Overall Accuracy:" + overallAccuracy);
-        System.out.println("Overall Error:   " + overallError);
+        System.out.println("Test Accuracy: " + testAccuracy);
+        System.out.println("Test Error:    " + testError);
+
+        System.out.println("Precision:     " + precision);
+        System.out.println("Recall:        " + recall);
+        System.out.println("F1 Score:      " + f1);
+
+        System.out.println("Train Accuracy:    " + trainAccuracy);
+        System.out.println("Overall Accuracy:   " + overallAccuracy);
+        System.out.println("Overall Error: " + overallError);
         System.out.println("----------------------------------");
 
         return testAccuracy;
     }
+
 
 
 

@@ -33,29 +33,18 @@ ETL (Micah):
 insert etl functionality here
 
 SOME OF OUR CURRENT DATA FROM OUR MODEL (different outputs due to random validation set)
----- Evaluation for k=14 ----
-Test Accuracy:   0.9140999315537304
-Test Error:      0.08590006844626963
-Train Accuracy:  0.9379539086178303
-Overall Accuracy:0.931978912176932
-Overall Error:   0.06802108782306804
+---- Evaluation for k=13 ----
+Test Accuracy: 0.9093086926762491
+Test Error:    0.09069130732375086
+Precision:     0.9140410958904109
+Recall:        0.905359565807327
+F1 Score:      0.9096796182685755
+Train Accuracy:    0.9408131755018013
+Overall Accuracy:   0.9329218636149329
+Overall Error: 0.0670781363850671
 ----------------------------------
 
----- Evaluation for k=8 ----
-Test Accuracy:   0.9045174537987679
-Test Error:      0.09548254620123209
-Train Accuracy:  0.9438439983988105
-Overall Accuracy:0.933993399339934
-Overall Error:   0.06600660066006603
-----------------------------------
 
----- Evaluation for k=10 ----
-Test Accuracy:   0.910848733744011
-Test Error:      0.08915126625598901
-Train Accuracy:  0.9416137702293133
-Overall Accuracy:0.933907676481934
-Overall Error:   0.06609232351806604
-----------------------------------
 
 
 
