@@ -10,7 +10,7 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) {
         // Reading in normalized clean data
-        ArrayList<Row> all_rows = read_normalized_data("data/normalized_data_clean.csv");
+        ArrayList<Row> all_rows = read_normalized_data("data/new_normalized_data_clean.csv");
         System.out.println(all_rows.get(0));
         System.out.println(all_rows.get(42));
 
@@ -25,7 +25,7 @@ public class Main {
 
         for (Row r : all_rows) {
             if (r.timestampUtc.isBefore(start2024)) {
-                train.add(r);        // All 2023 rows → training
+                train.add(r);        // All 2022 and 2023 rows → training
             } else {
                 rows2024.add(r);     // All 2024 rows → val/test randomization pool
             }
@@ -33,7 +33,7 @@ public class Main {
 
         Collections.shuffle(rows2024, new Random());  // randomize order
 
-        int valCount = (int) Math.ceil(rows2024.size() * 0.10);
+        int valCount = (int) Math.ceil(rows2024.size() * 0.30);
 
         validation.addAll(rows2024.subList(0, valCount));
         test.addAll(rows2024.subList(valCount, rows2024.size()));

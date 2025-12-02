@@ -16,7 +16,7 @@ library(umap)
 ## Reading in Clean Normalized Data and Visualizing
 
 ```{r}
-df <- read_csv("../data/normalized_data_clean.csv")
+df <- read_csv("../data/new_normalized_data_clean.csv")
 
 # Separate features and label
 features <- df %>% select(-label_surfable, -timestamp_utc, -station_id, -tide_station)
