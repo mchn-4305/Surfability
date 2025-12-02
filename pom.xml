@@ -63,7 +63,7 @@
                 <configuration>
                     <mainClass>edu.surfability.etl.Main</mainClass>
                     <arguments>
-                        <argument>--start</argument><argument>2023-01-01T00:00:00Z</argument>
+                        <argument>--start</argument><argument>2022-01-01T00:00:00Z</argument>
                         <argument>--end</argument><argument>2024-12-31T23:00:00Z</argument>
                         <argument>--ndbc</argument><argument>46028,46042</argument>
                         <argument>--tide</argument><argument>9412110</argument>
