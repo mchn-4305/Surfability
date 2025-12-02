@@ -54,6 +54,7 @@ public class Main {
         // Need to calculate the final algorithm's accuracy/error
         // and export/visualize results
         model.evaluateTestSet(max_k);
+        model.writeAllRowsToCsv("final_labeled_data.csv");
     }
 
     public static ArrayList<Row> read_normalized_data(String filename) {

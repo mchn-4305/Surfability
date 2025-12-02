@@ -17,6 +17,7 @@ public class Row {
     // Label
     public boolean labelSurfable;
     public boolean givenLabel; // THIS IS WHAT THE MODEL WILL ASSIGN IT
+    public boolean correctlyLabeled; // Does the labelSurfable = givenLabel?
 
     @Override
     public String toString() {
@@ -38,6 +39,7 @@ public class Row {
                 ", swell_dir_y=" + swell_dir_y +
                 ", labelSurfable=" + labelSurfable +
                 ", givenLabel=" + givenLabel +
+                ", correctlyLabeled=" + correctlyLabeled +
                 '}';
     }
 }
