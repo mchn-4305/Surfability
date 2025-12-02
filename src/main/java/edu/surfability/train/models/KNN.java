@@ -15,10 +15,44 @@ public class KNN {
     }
 
     public HashMap<Integer, Double> process() {
-        HashMap<Integer, Double> results = new HashMap<>(); // This maps k to the accuracy score
-        // Try multiple different k's, use validation set for optimizing
+        HashMap<Integer, Double> results = new HashMap<>(); // K -> accuracy
+
+        for (int k = 1; k <= 80; k++) {
+            int correct = 0;
+
+            for (Row r : validation) {
+                boolean prediction = predict(k, r);
+                if (prediction == r.labelSurfable) {
+                    correct++;
+                }
+            }
+
+            double accuracy = correct / (double) validation.size();
+            results.put(k, accuracy);
+
+            System.out.println("k=" + k + " → accuracy=" + accuracy);
+        }
+
         return results;
     }
+
+    public double evaluateTestSet(int k) {
+        int correct = 0;
+
+        for (Row r : testing) {
+            boolean prediction = predict(k, r);
+            if (prediction == r.labelSurfable) {
+                correct++;
+            }
+        }
+
+        double accuracy = correct / (double) testing.size();
+        System.out.println("Final Test Accuracy using k=" + k + ": " + accuracy);
+
+        return accuracy;
+    }
+
+
 
     public boolean predict(int k, Row target) {
         // Compute distance to all training points

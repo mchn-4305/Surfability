@@ -45,9 +45,15 @@ public class Main {
         // Need to perform KNN algorithm (multiple times with hyperparameter tuning)
         KNN model = new KNN(train, validation, test);
         HashMap<Integer, Double> results = model.process();
+        int max_k = results.entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
 
         // Need to calculate the final algorithm's accuracy/error
         // and export/visualize results
+        model.evaluateTestSet(max_k);
     }
 
     public static ArrayList<Row> read_normalized_data(String filename) {
