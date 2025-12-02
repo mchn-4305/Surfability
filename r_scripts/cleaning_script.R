@@ -1,5 +1,5 @@
 library(tidyverse)
-raw_data <- read_csv("../data/raw_surfability_hourly.csv")
+raw_data <- read_csv("data/surfability_hourly.csv")
 
 # Check original size
 dim(raw_data)
@@ -18,4 +18,4 @@ dim(data_clean)
 # print a preview
 head(data_clean)
 
-write_csv(data_clean, "../data/data_clean.csv")
+write_csv(data_clean, "data/data_clean.csv")
